@@ -1,0 +1,41 @@
+<.header>
+  Listing Operatingsystems
+  <:actions>
+    <.link patch={~p"/operatingsystems/new"}>
+      <.button>New Operating system</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="operatingsystems"
+  rows={@streams.operatingsystems}
+  row_click={fn {_id, operating_system} -> JS.navigate(~p"/operatingsystems/#{operating_system}") end}
+>
+  <:col :let={{_id, operating_system}} label="Name"><%= operating_system.name %></:col>
+  <:action :let={{_id, operating_system}}>
+    <div class="sr-only">
+      <.link navigate={~p"/operatingsystems/#{operating_system}"}>Show</.link>
+    </div>
+    <.link patch={~p"/operatingsystems/#{operating_system}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, operating_system}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: operating_system.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="operating_system-modal" show on_cancel={JS.patch(~p"/operatingsystems")}>
+  <.live_component
+    module={GameLibraryWeb.OperatingSystemLive.FormComponent}
+    id={@operating_system.id || :new}
+    title={@page_title}
+    action={@live_action}
+    operating_system={@operating_system}
+    patch={~p"/operatingsystems"}
+  />
+</.modal>
