@@ -7,10 +7,8 @@ defmodule GameLibrary.GameDB.Game do
   schema "games" do
     field :description, :string
     field :name, :string
-    field :operatingsystem_id, :id
-    field :brand_id, :id
-    belongs_to :operatingsystem, OperatingSystem
-    belongs_to :brand, Brand
+    belongs_to(:operatingsystem, OperatingSystem, foreign_key: :operatingsystem_id)
+    belongs_to(:brand, Brand, foreign_key: :brand_id)
 
     timestamps()
   end
